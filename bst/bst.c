@@ -45,6 +45,8 @@ void __add_node(struct node *parent, struct node *new)
             parent->left = new;
             new->parent = parent;
         }
+    } else {
+        printf("Duplicates not allowed: id=%d\n", new->id);
     }
 }
 
@@ -65,7 +67,10 @@ struct node *tree_add_node(struct tree *t, int id)
 
     if (t->root) {
         __add_node(t->root, new);
-        printf("Added node id=%d to parent id=%d\n", new->id, new->parent->id);
+        if (new->parent)
+            printf("Added node id=%d to parent id=%d\n", new->id, new->parent->id);
+        else
+            free(new);
     } else {
         t->root = new;
         printf("Added root id=%d\n", new->id);

@@ -21,11 +21,14 @@ int main(int argc, char **argv)
     /* add leaves */
     for (int i = 8, j = 12; i > 0; i -= 3, j += 3) {
         tree_add_node(t, i);
-        tree_add_node(t, j);	
+        tree_add_node(t, j);
         tree_add_node(t, i + 1);
         tree_add_node(t, j - 1);
         tree_add_node(t, j * 2);
     }
+
+    /* handle duplicates */
+    tree_add_node(t, 8);
 
     /* test node search */
     node1 = tree_find_node(t, 14);
