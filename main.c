@@ -112,18 +112,18 @@ struct node *tree_find_node(struct tree *tree, int id)
 }
 
 /*
- * __cleanup_node() - Recursively cleanup a subtree of a given node (auxiliary func, shouldn't be called directly)
+ * __cleanup_subtree() - Recursively cleanup a subtree of a given node (auxiliary func, shouldn't be called directly)
  * @node: pointer to a subtree root which is to be removed
  *
  * Return: no
  * */
-void __cleanup_node(struct node *node)
+void __cleanup_subtree(struct node *node)
 {
     if (!node)
         return;
 
-    __cleanup_node(node->left);
-    __cleanup_node(node->right);
+    __cleanup_subtree(node->left);
+    __cleanup_subtree(node->right);
     printf("Cleaning node id=%d, parent=%d\n", node->id, node->parent? node->parent->id : -1);
 
     free(node);
@@ -137,7 +137,7 @@ void __cleanup_node(struct node *node)
  * */
 void tree_cleanup(struct tree *tree)
 {
-    __cleanup_node(tree->root);
+    __cleanup_subtree(tree->root);
     tree->root = NULL;
     tree->size = 0;
 }
