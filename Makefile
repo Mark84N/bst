@@ -1,4 +1,8 @@
+SRC=bst/bst.c queue/queue.c main.c
+CFLAGS+=-g -Wall
+INCLUDE=-I.
+
 all:
-	gcc -o main main.c queue/queue.c -g -Wall
+	gcc -o bstest $(SRC) $(CFLAGS) $(INCLUDE)
 clean:
-	rm main
+	rm bstest
