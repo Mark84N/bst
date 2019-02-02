@@ -142,8 +142,10 @@ void tree_cleanup(struct tree *tree)
  * */
 static inline struct node *subtree_find_max(struct node *n)
 {
-    while (n->right)
-        n = n->right;
+    if (n) {
+        while (n->right)
+            n = n->right;
+    }
 
     return n;
 }
@@ -155,8 +157,10 @@ static inline struct node *subtree_find_max(struct node *n)
  * */
 static inline struct node *subtree_find_min(struct node *n)
 {
-    while (n->left)
-        n = n->left;
+    if (n) {
+        while (n->left)
+            n = n->left;
+    }
 
     return n;
 }
@@ -216,7 +220,7 @@ struct node *tree_find_preceding(struct tree *t, int id)
 }
 
 /*
- * tree_remove_node() - Remove a node and align existing structure
+ * tree_remove_node() - Remove node with specific id, rearrange subtree
  * @t: pointer to a tree
  * @id: id to remove
  *
@@ -230,10 +234,24 @@ int tree_remove_node(struct tree *t, int id)
     if (!node)
         return 1;
 
-    if (!node->left && !node->right)
-        goto free;
+    if (t->size == 1)
+        goto out;
 
     parent = node->parent;
+    /* it's root */
+    if (!parent) {
+        /* if root's right subtree is present: right node is the new root;
+        append left subtree to node's subtree minimal node' */
+        if (node->right) {
+            struct node *min_right = subtree_find_min(node->right);
+            min_right->left = node->left;
+            t->root = node->right;
+        } else if (node->left) {
+            t->root = node->left;
+        }
+        goto out;
+    }
+
     if (parent->right == node) {
         /* the node and ALL leaves are larger than the parent */
         struct node *max_left = subtree_find_max(node->left);
@@ -263,8 +281,8 @@ int tree_remove_node(struct tree *t, int id)
             node->left->parent = min_right;
         }
     }
+out:
     t->size--;
-free:
     free(node);
 
     return 0;

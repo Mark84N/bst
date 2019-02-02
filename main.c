@@ -38,6 +38,15 @@ int main(int argc, char **argv)
         printf("Node not found\n");
     }
 
+    /* try to delete root */
+    node1 = tree_find_node(t, 10);
+    if (node1) {
+        printf("Found node id=%d, parent id=%d\n", node1->id, node1->parent? node1->parent->id : -1);
+        tree_remove_node(t, 10);
+    } else {
+        printf("Node not found\n");
+    }
+
     /* test searching of sucessive */
     node2 = tree_find_successive(t, 9);
     if (node2) {
